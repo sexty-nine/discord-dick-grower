@@ -3,7 +3,6 @@ const { Client, GatewayIntentBits, Collection } = require("discord.js");
 const logger = require("./functions/logging.js");
 const chalk = require("chalk");
 const fs = require('node:fs');
-
 // Creating a new Client
 
 const client = new Client({
@@ -11,9 +10,10 @@ const client = new Client({
         GatewayIntentBits.Guilds,
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.DirectMessages
     ]
 });
-
 
 /* ----- Variables ----- */
 
@@ -21,7 +21,14 @@ client.commands = new Collection();
 client.messageCommands = new Collection();
 client.cooldowns = new Collection();
 client.config = require("./utils/config.js");
-client.logger = logger
+client.logger = new logger
+
+// some prototypes for making the code more readable
+
+Array.prototype.random = function () {
+    return this[ Math.floor((Math.random() * this.length)) ];
+}
+
 /* ----- Handlers ----- */
 
 const handlerFolders = fs.readdirSync('./handlers');
