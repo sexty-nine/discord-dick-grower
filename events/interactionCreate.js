@@ -20,6 +20,7 @@ module.exports = {
                     await interaction.reply({ content: 'Error while executing command', ephemeral: true });
                 }
                 logger.error(error)
+                console.error(error)
             }
         }
 	},

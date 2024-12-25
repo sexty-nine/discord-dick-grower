@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } = require("discord.js")
+const { SlashCommandBuilder, EmbedBuilder, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder, ApplicationIntegrationType, InteractionContextType } = require("discord.js")
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -6,7 +6,9 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('help')
 		.setDescription('Get a list of the commands used to interact with the bot')
-        .addBooleanOption((option) => option.setName('ephemeral').setDescription('Only you can see the response')),
+        .addBooleanOption((option) => option.setName('ephemeral').setDescription('Only you can see the response'))
+		.setIntegrationTypes([ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall])
+		.setContexts([InteractionContextType.PrivateChannel, InteractionContextType.Guild]),
 	async execute(interaction) {
 
 		if (interaction.options.getBoolean('ephemeral')) {
@@ -56,7 +58,7 @@ module.exports = {
 
 		const embed = new EmbedBuilder()
 			.setTitle('🤔 Need help? Here\'s my command list')
-			.setFooter({ text: `Requested by ${interaction.member.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
+			.setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
 			.setTimestamp()
 		
 		for (category of commands) {
