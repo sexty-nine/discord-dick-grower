@@ -1,14 +1,22 @@
 const logger = require('../functions/logging.js')
 const { REST, Routes } = require('discord.js');
+const mongoose = require('mongoose');
 const fs = require('node:fs');
 const path = require('node:path');
-const { token } = require("../config.js")
 
 module.exports = {
 	name: "ready",
     once: true,
 	async execute(c) {
         logger.log(`${c.user.username} is ready`)
+
+        await mongoose.connect(c.config.databaseUri).then(async () => {
+            logger.info('Connected to the database')
+        }).catch(async (err) => {
+            logger.error(err)
+            throw new Error('Could not connect to the database')
+        })
+
         const clientId = c.user.id
         const commands = [];
         // Grab all the command folders from the commands directory you created earlier
@@ -30,7 +38,7 @@ module.exports = {
         }
 
         // Construct and prepare an instance of the REST module
-        const rest = new REST().setToken(token);
+        const rest = new REST().setToken(c.config.token);
 
         try {
             logger.log(`Started loading ${commands.length} (/) commands.`);
@@ -46,18 +54,5 @@ module.exports = {
             // And of course, make sure you catch and log any errors!
             logger.error(error);
         }
-
-
-        const filePath = path.join(__dirname, '../messages/embeds');
-        const files = fs.readdirSync(filePath);
-
-        setInterval(async () => {
-            for (const file of files) {
-                const fPath = path.join(filePath, file);
-                const f = require(fPath);
-                f(c)
-            }
-        }, 30000)
-
     },
 };
