@@ -13,10 +13,8 @@ module.exports = {
 			await interaction.deferReply();
 		}
 
-
 		const { version } = require("../../../package.json")
 
-	
 		
 		const uptime = Math.floor(Date.now() / 1000) - Math.floor(process.uptime())
 		const embed = new EmbedBuilder()

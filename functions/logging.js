@@ -6,10 +6,10 @@ const logLevels = {
       color: chalk.cyan,
       label: 'INFO',
     },
-    SUCCESS: {
-        color: chalk.green,
-        label: 'SUCCESS',
-    },
+    // SUCCESS: {
+    //     color: chalk.green,
+    //     label: 'SUCCESS',
+    // },
     WARNING: {
       color: chalk.yellow,
       label: 'WARNING',
@@ -49,7 +49,7 @@ module.exports = class Logger {
         Logger._log('ERROR', message);
     }
   
-    static success(message) {
-        Logger._log('SUCCESS', message);
-    }
+    // static success(message) {
+    //     Logger._log('SUCCESS', message);
+    // }
 }
