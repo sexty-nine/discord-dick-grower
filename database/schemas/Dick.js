@@ -5,13 +5,13 @@ const Dick = new Schema({
     userId: String,
     name: String,
     size: Number,
-    lastGrow: {
-        type: Date,
+    nextGrowTimestamp: {
+        type: Number,
         default: null
     },
-    tillAnotherGrowTime: {
-        type: Date,
-        default: null
+    growTime: {
+        type: Number,
+        default: 12 * 60 * 60 * 1000
     },
     GrowMultiplier: Number,
 });

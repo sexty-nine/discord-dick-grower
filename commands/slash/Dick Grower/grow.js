@@ -1,10 +1,10 @@
 const { SlashCommandBuilder, EmbedBuilder, ApplicationIntegrationType, InteractionContextType } = require("discord.js");
 const Dick = require('../../../database/schemas/Dick.js')
+
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('start')
-        .setDescription('Start growing your dick!')
-        .addStringOption((option) => option.setName('name').setDescription('Whats his name? (your dick i mean)'))
+        .setName('grow')
+        .setDescription('Grow your dick and have the longest dick in the server!')
         .addBooleanOption((option) => option.setName('ephemeral').setDescription('Only you can see the response'))
         .setIntegrationTypes([ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall])
         .setContexts([InteractionContextType.PrivateChannel, InteractionContextType.Guild]),
@@ -22,37 +22,46 @@ module.exports = {
             userId: interaction.user.id
         }).exec()
 
-        if (dick) {
+        if (!dick) {
             const embed = new EmbedBuilder()
                 .setTitle('Error')
-                .setDescription(`⚠️ You already have a dick here. His name's \`${dick.name}\``)
+                .setDescription(`⚠️ You don't have a dick here. Create one by using \`/start\``)
                 .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
                 .setTimestamp()
-            await interaction.followUp('sex')
+            
             await interaction.editReply({ embeds: [embed] });
-            return
+            return;
         }
 
-        const name = interaction.options.getString('name') ?? require('../../../utils/first-names.json').random()
+        const date = new Date().getTime()
 
-        const newDick = await Dick.create({
-            chatId: chatId,
-            userId: interaction.user.id,
-            name: name,
-            size: 0,
-            nextGrowTimestamp: null,
-            growTime: 12 * 60 * 60 * 1000,
-            GrowMultiplier: 1,        
+        if (dick.nextGrowTimestamp > date) {
+            const timeLeft = Math.floor((dick.nextGrowTimestamp - date) / 1000) // Convert milliseconds to seconds
+            
+            const embed = new EmbedBuilder()
+                .setTitle('Error')
+                .setDescription(`⚠️ You need to wait for <t:${Math.floor(date / 1000) + timeLeft}:R>`) // Use Discord's relative time format
+                .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
+                .setTimestamp()
+
+            await interaction.editReply({ embeds: [embed] });
+            return;
+    
+        }
+
+        const increasement = (Math.floor(Math.random() * 10) + 1) * (dick.GrowMultiplier ?? 1);
+
+        const newDick = await dick.updateOne({
+            size: dick.size + increasement,
+            nextGrowTimestamp: date + dick.growTime
         })
 
         const embed = new EmbedBuilder()
-            .setTitle('Happy new dick!')
-            .setDescription('You made a new dick for this chat! Start growing it using `/grow`')
+            .setTitle('Congrats')
+            .setDescription(`🎉 You added **${increasement}cm** to your dick.\nNow you got a **${dick.size + increasement}cm** dick.`)
             .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
             .setTimestamp()
 
         await interaction.editReply({ embeds: [embed] });
     },
-};
-
-
+}
