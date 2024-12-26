@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, ButtonStyle } = require("discord.js");
+const { SlashCommandBuilder, ButtonStyle, ApplicationIntegrationType, InteractionContextType } = require("discord.js");
 const Dick = require('../../../database/schemas/Dick.js');
 const { Pagination } = require('pagination.djs');
 

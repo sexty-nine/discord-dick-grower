@@ -56,7 +56,7 @@ module.exports = {
 
         const embed = new EmbedBuilder()
             .setTitle('Congrats')
-            .setDescription(`🎉 You added **${increasement}cm** to your dick.\nNow you got a **${dick.size + increasement}cm** dick.`)
+            .setDescription(`🎉 You added **${increasement} cm** to your dick.\nNow you got a **${dick.size + increasement} cm** dick.`)
             .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
             .setTimestamp()
 

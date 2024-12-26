@@ -26,7 +26,6 @@ module.exports = {
                 .setDescription(`⚠️ You already have a dick here. His name's \`${dick.name}\``)
                 .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
                 .setTimestamp()
-            await interaction.followUp('sex')
             await interaction.editReply({ embeds: [embed] });
             return
         }
