@@ -11,11 +11,8 @@ module.exports = {
 		.setContexts([InteractionContextType.PrivateChannel, InteractionContextType.Guild]),
 	async execute(interaction) {
 
-		if (interaction.options.getBoolean('ephemeral')) {
-			await interaction.deferReply({ ephemeral: true });
-		} else {
-			await interaction.deferReply();
-		}
+        const ephemeral = interaction.options.getBoolean('ephemeral');
+        await interaction.deferReply({ ephemeral });
 
 		const appcmds = await interaction.client.application.commands.fetch();
 		
