@@ -6,7 +6,9 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('leaderboard')
         .setDescription('Top well lengthed dicks in this chat')
-        .addBooleanOption(option => option.setName('ephemeral').setDescription('Only you can see the response')),
+        .addBooleanOption(option => option.setName('ephemeral').setDescription('Only you can see the response'))
+        .setIntegrationTypes([ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall])
+        .setContexts([InteractionContextType.PrivateChannel, InteractionContextType.Guild]),
 
     async execute(interaction) {
         const ephemeral = interaction.options.getBoolean('ephemeral');
