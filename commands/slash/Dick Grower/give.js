@@ -44,6 +44,17 @@ module.exports = {
             return;
         }
 
+        if (!targetedDick) {
+            const embed = new EmbedBuilder()
+                .setTitle('Error')
+                .setDescription(`⚠️ The user doesn't have a dick here. Create one by using \`/start\``)
+                .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
+                .setTimestamp()
+            
+            await interaction.editReply({ embeds: [embed] });
+            return;
+        }
+
         // Stops the user from giving dick while they don't have enough
         if (givenSize > dick.size){
             await interaction.editReply('Sorry! your dick is not long enough!')
