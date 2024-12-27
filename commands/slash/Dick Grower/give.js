@@ -6,7 +6,7 @@ module.exports = {
         .setName('give')
         .setDescription('Give someone else your dick!')
         .addUserOption((option) => option.setName('user').setDescription('The user you want to give the dick to!').setRequired(true))
-        .addIntegerOption((option) => option.setName('size').setDescription('The dick size you want to give!').setRequired(true))
+        .addIntegerOption((option) => option.setName('size').setDescription('The dick size you want to give!').setRequired(true).setMinValue(1))
         .addBooleanOption((option) => option.setName('ephemeral').setDescription('Only you can see the response'))
         .setIntegrationTypes([ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall])
         .setContexts([InteractionContextType.PrivateChannel, InteractionContextType.Guild]),
@@ -44,15 +44,28 @@ module.exports = {
             return;
         }
 
-        // Stops the user from giving dick while they don't have enough
-        if (givenSize > dick.size){
-            await interaction.editReply('Sorry! your dick is not long enough!')
+        if (!targetedDick) {
+            const embed = new EmbedBuilder()
+                .setTitle('Error')
+                .setDescription(`⚠️ Your target user doesn't have a dick here. Ask them to create one by using \`/start\``)
+                .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
+                .setTimestamp()
+            
+            await interaction.editReply({ embeds: [embed] });
             return;
         }
 
-        // Stops the users from providing the bot with a zero or a negative number
-        if (givenSize <= 0) {
-            await interaction.editReply('Sorry! You can\'t provide a zero or a negative number!')
+
+        // Stops the user from giving dick while they don't have enough
+        if (givenSize > dick.size){
+            const embed = new EmbedBuilder()
+                .setTitle('Error')
+                .setDescription(`⚠️ Sorry! Your dick isn't long enough`)
+                .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
+                .setTimestamp()
+            
+            await interaction.editReply({ embeds: [embed] });
+
             return;
         }
 
@@ -66,7 +79,7 @@ module.exports = {
 
         const embed = new EmbedBuilder()
             .setTitle('Congrats')
-            .setDescription(`🎉 You successfully gave **${givenSize}cm** of your dick to **<@${targetedUser.id}>**.\nNow you got a **${dick.size - givenSize}cm** dick.`)
+            .setDescription(`You successfully gave **${givenSize} cm** of your dick to **<@${targetedUser.id}>**.\nNow you got a **${dick.size - givenSize} cm** dick.`)
             .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
             .setTimestamp()
 
