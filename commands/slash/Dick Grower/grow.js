@@ -47,7 +47,7 @@ module.exports = {
     
         }
 
-        const increasement = (Math.floor(Math.random() * 10) + 1) * (dick.GrowMultiplier ?? 1);
+        const increasement = Math.floor(Math.random() * 16) - 5
 
         const newDick = await dick.updateOne({
             size: dick.size + increasement,
@@ -56,7 +56,7 @@ module.exports = {
 
         const embed = new EmbedBuilder()
             .setTitle('Congrats')
-            .setDescription(`🎉 You added **${increasement} cm** to your dick.\nNow you got a **${dick.size + increasement} cm** dick.`)
+            .setDescription(`You added **${increasement} cm** to your dick.\nNow you got a **${dick.size + increasement} cm** dick.`)
             .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
             .setTimestamp()
 
