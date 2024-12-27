@@ -13,7 +13,15 @@ const Dick = new Schema({
         type: Number,
         default: 12 * 60 * 60 * 1000
     },
-    GrowMultiplier: Number,
+    growMultiplier: Number,
+    winStreak: {
+        type: Number,
+        default: 0
+    },
+    loseStreak: {
+        type: Number,
+        default: 0
+    }
 });
 
 module.exports = model('Dick', Dick);

@@ -39,7 +39,9 @@ module.exports = {
             size: 0,
             nextGrowTimestamp: null,
             growTime: 12 * 60 * 60 * 1000,
-            GrowMultiplier: 1,        
+            growMultiplier: 1,
+            winStreak: 0,
+            loseStreak: 0     
         })
 
         const embed = new EmbedBuilder()
