@@ -155,7 +155,7 @@ module.exports = {
         } catch (e) {
             const expiredEmbed = new EmbedBuilder()
                 .setTitle('Battle')
-                .setDescription(`Message expired`)
+                .setDescription(`Request expired`)
                 .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
                 .setTimestamp()
 
