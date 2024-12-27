@@ -30,7 +30,7 @@ module.exports = {
             .addFields(
                 { name: `📶 Websocket Latency`, value: `- \`${interaction.client.ws.ping}ms\`` },
                 { name: `🕒 Uptime`, value: `- <t:${uptime}> <t:${uptime}:R>`},
-                { name: `💾 Database Ping`, value: `- \`${dbPing}ms\` (${dbQuality})` }
+                { name: `💾 Database Response time`, value: `- \`${dbPing}ms\` (${dbQuality})` }
             )
             .setFooter({ text: `${interaction.client.user.username} V${version} - Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
             .setTimestamp();
