@@ -54,15 +54,17 @@ module.exports = {
             
                     await interaction.editReply({ embeds: [reloadEmbed] })
 
+                    break
+
                 case 'set-size':
 
                     const chatId = interaction.guildId ?? interaction.channelId;
-                    const userId = interaction.user.id;
+                    const user = interaction.options.getUser('user');
                     const size = interaction.options.getInteger('size');
 
                     const dick = await Dick.findOne({
                         chatId:chatId,
-                        userId: userId,
+                        userId: user.id,
                     }).exec()
 
                     await dick.updateOne({
@@ -71,11 +73,13 @@ module.exports = {
 
                     const sizeSetEmbed = new EmbedBuilder()
                         .setTitle('Success')
-                        .setDescription(`You successfully set the dick size of <@${interaction.user.id}> to **${size}**`)
+                        .setDescription(`You successfully set the dick size of <@${user.id}> to **${size}**`)
                         .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
                         .setTimestamp()
 
                     await interaction.editReply({ embeds:[sizeSetEmbed] })
+
+                    break
 
                     
                     
