@@ -27,6 +27,18 @@ module.exports = {
             userId: opponent.id
         }).exec()
 
+        if (opponent.id === interaction.user.id) {
+            const embed = new EmbedBuilder()
+                .setTitle('Error')
+                .setDescription(`⚠️ You can't battle yourself.`)
+                .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
+                .setTimestamp()
+        
+            await interaction.editReply({ embeds: [embed] });
+            return;
+
+        }
+
         if (!userDick) {
             const embed = new EmbedBuilder()
                 .setTitle('Error')
@@ -118,7 +130,7 @@ module.exports = {
                 return;
             }
 
-            const result = calculateBattleResult(interaction.user, opponent, userDick, opponentDick);
+            const result = await calculateBattleResult(interaction.user, opponent, userDick, opponentDick);
 
             const updateUserDick = {
                 size: userDick.size + (result.winner === interaction.user ? bet : -bet),
@@ -134,7 +146,7 @@ module.exports = {
     
             await userDick.updateOne(updateUserDick);
             await opponentDick.updateOne(updateOpponentDick);
-    
+            console.log(result)
             const embed = new EmbedBuilder()
                 .setTitle('Battle Result')
                 .setDescription(`The battle between ${interaction.user.displayName} and ${opponent.displayName} has concluded!`)
