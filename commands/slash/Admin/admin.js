@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, ApplicationIntegrationType, InteractionContextType } = require('discord.js');
 const slashCommandLoader = require('../../../handlers/client/slashCommands.js')
+const { inspect } = require('util');
 const Dick = require('../../../database/schemas/Dick.js')
 
 module.exports = {
@@ -11,6 +12,21 @@ module.exports = {
             .addSubcommand((sub) => sub
                 .setName('reload')
                 .setDescription('Reloads a command!')
+                .addBooleanOption(option => option
+                    .setName('ephemeral')
+                    .setDescription('Only you can see the response')
+                )
+            )
+            .addSubcommand((sub) => sub
+                .setName('eval')
+                .setDescription('Executes a piece of javascript shit.')
+                .addStringOption(option => option
+                    .setName('code')
+                    .setDescription('The JavaScript code to evaluate.')
+                    .setRequired(true))
+                .addBooleanOption(option => option
+                    .setName('async')
+                    .setDescription('Evaluate the code in an async function scope.'))
                 .addBooleanOption(option => option
                     .setName('ephemeral')
                     .setDescription('Only you can see the response')
@@ -33,57 +49,68 @@ module.exports = {
 
 
         async execute(interaction) {
-
-            const subCommand = interaction.options.getSubcommand();
-
-            // Checks if the user is the owner or not
-            if (interaction.user.id !== interaction.client.config.ownerId) return await interaction.editReply("No")
-
             const ephemeral = interaction.options.getBoolean('ephemeral');
             await interaction.deferReply({ ephemeral });
 
+            if (!interaction.client.config.ownerIds.includes(interaction.user.id)) return await interaction.editReply("No")
+
+            const subCommand = interaction.options.getSubcommand();
+
             switch (subCommand){
                 case 'reload':
-
+            
                     await slashCommandLoader(interaction.client)
                     
-                    const reloadEmbed = new EmbedBuilder()
+                    const embed = new EmbedBuilder()
                         .setTitle('Reloaded')
                         .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
                         .setTimestamp()
             
-                    await interaction.editReply({ embeds: [reloadEmbed] })
+                    await interaction.editReply({ embeds: [embed] })
+                    break;
+                case 'eval':
+                    const code = interaction.options.getString('code');
+                    const isAsync = interaction.options.getBoolean('async') || false;
 
-                    break
+                    try {
+                        // Restrict execution scope
+                        const evalCode = isAsync
+                            ? `(async () => { ${code} })()`
+                            : code;
 
-                case 'set-size':
+                        let result = eval(evalCode);
 
-                    const chatId = interaction.guildId ?? interaction.channelId;
-                    const user = interaction.options.getUser('user');
-                    const size = interaction.options.getInteger('size');
+                        // Handle async results
+                        if (result instanceof Promise) {
+                            result = await result;
+                        }
 
-                    const dick = await Dick.findOne({
-                        chatId:chatId,
-                        userId: user.id,
-                    }).exec()
+                        // Ensure safe and readable output
+                        const resultString = typeof result === 'object'
+                            ? inspect(result, { depth: 2, maxArrayLength: 100 })
+                            : String(result);
 
-                    await dick.updateOne({
-                        size:size
-                    })
+                        const embed = new EmbedBuilder()
+                            .setTitle('Eval Result')
+                            .setDescription(`\`\`\`js\n${resultString.slice(0, 2000)}\n\`\`\``)
+                            .setColor('Green')
+                            .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
+                            .setTimestamp();
 
-                    const sizeSetEmbed = new EmbedBuilder()
-                        .setTitle('Success')
-                        .setDescription(`You successfully set the dick size of <@${user.id}> to **${size}**`)
-                        .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
-                        .setTimestamp()
-
-                    await interaction.editReply({ embeds:[sizeSetEmbed] })
-
-                    break
-
-                    
-                    
-
+                        await interaction.editReply({ embeds: [embed] });
+                    } catch (error) {
+                        // Handle errors gracefully
+                        const errorMessage = `Error: ${error.name}\nMessage: ${error.message}\nStack: ${error.stack}`;
+                        const embed = new EmbedBuilder()
+                            .setTitle('Eval Error')
+                            .setDescription(`\`\`\`js\n${errorMessage.slice(0, 2000)}\n\`\`\``)
+                            .setColor('Red')
+                            .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
+                            .setTimestamp();
+                        await interaction.editReply({ embeds: [embed] });
+                    }
+                    break;
+    
             }
         }
             
