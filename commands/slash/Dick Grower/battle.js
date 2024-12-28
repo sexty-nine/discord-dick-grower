@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, ApplicationIntegrationType, InteractionContextType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const Dick = require('../../../database/schemas/Dick.js')
-const { calculateBattleResult } = require('../../../functions')
+const { calculateBattleResult } = require('../../../functions/battleCalculation.js')
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('battle')
