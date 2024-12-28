@@ -160,6 +160,7 @@ module.exports = {
                 .setTimestamp()
 
             await interaction.editReply({ content:'', embeds: [expiredEmbed], components: [] })
+            console.error(e)
         }
     },
 }
