@@ -12,7 +12,7 @@ module.exports = {
         // Determines the win rate based on the the three inputs above 
         const totalWinRate = (userWinRate + userStreakAdjustment + userRandomFactor) + (opponentWinRate + opponentStreakAdjustment + opponentRandomFactor)
         const totalUserWinRate = ((userWinRate + userStreakAdjustment + userRandomFactor) / totalWinRate) * 100;
-        const totalOpponentWinRate = ((opponentWinRate + opponentStreakAdjustment + opponentRandomFactor) / totalWinًate) * 100;
+        const totalOpponentWinRate = ((opponentWinRate + opponentStreakAdjustment + opponentRandomFactor) / totalWinRate) * 100;
         // Whoever has the highest win rate wins
         const winner = totalOpponentWinRate < totalUserWinRate ? user : opponent;
         // These are the values that the users see as win rates
