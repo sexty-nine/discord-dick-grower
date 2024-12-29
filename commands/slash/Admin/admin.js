@@ -170,7 +170,7 @@ module.exports = {
                     }
 
                     try {
-                        const size = interaction.options.getInteger('size') ?? 1;
+                        const size = interaction.options.getInteger('size') ?? 0;
                         const dickName = interaction.options.getString('name');
 
                         const startedDick = await Dick.create({
