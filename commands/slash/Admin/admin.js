@@ -44,6 +44,27 @@ module.exports = {
                     .setDescription('The size you want to set the dick to')
                     .setRequired(true)
                 )
+            ).addSubcommand(sub => sub
+                .setName('start')
+                .setDescription('Forcefully starts a dick account for a user!')
+                .addUserOption(option => option
+                    .setName('user')
+                    .setDescription('The user you want to start a dick for!')
+                    .setRequired(true)
+                )
+                .addStringOption(option => option
+                    .setName('name')
+                    .setDescription('The name of the dick')
+                    .setRequired(true)
+                )
+                .addIntegerOption(option => option
+                    .setName('size')
+                    .setDescription('The starting size of the dick')
+                )
+                .addBooleanOption(option => option 
+                    .setName('ephemeral')
+                    .setDescription('Show the message to everyone or not')
+                )
             )
             ,
 
@@ -55,6 +76,14 @@ module.exports = {
             if (!interaction.client.config.ownerIds.includes(interaction.user.id)) return await interaction.editReply("No")
 
             const subCommand = interaction.options.getSubcommand();
+            const chatId = interaction.guildId ?? interaction.channelId;
+            const user = interaction.options.getUser('user');
+
+            const dick = await Dick.findOne({
+                chatId:chatId,
+                userId: user.id,
+            }).exec()
+
 
             switch (subCommand){
                 case 'reload':
@@ -112,14 +141,6 @@ module.exports = {
                     break;
 
                 case 'set-size':
-                    const chatId = interaction.guildId ?? interaction.channelId;
-                    const user = interaction.options.getUser('user');
-                    const size = interaction.options.getInteger('size');
-
-                    const dick = await Dick.findOne({
-                        chatId:chatId,
-                        userId: user.id,
-                    }).exec()
 
                     await dick.updateOne({
                         size:size
@@ -134,6 +155,55 @@ module.exports = {
                     await interaction.editReply({ embeds:[sizeSetEmbed] })
 
                     break;
+                case 'start':
+                    if (dick) {
+                        const dickExistsErrorEmbed = new EmbedBuilder()
+                            .setTitle('Error')
+                            .setDescription(`<@${user.id}> already has an dick!`) 
+                            .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
+                            .setTimestamp()
+
+                 
+                
+                        await interaction.editReply({ embeds:[dickExistsErrorEmbed]})
+                        break;
+                    }
+
+                    try {
+                        const size = interaction.options.getInteger('size') ?? 1;
+                        const dickName = interaction.options.getString('name');
+
+                        const startedDick = await Dick.create({
+                        chatId:chatId,
+                        userId:user.id,
+                        size:size,
+                        name:dickName,
+                    })
+
+                    const startEmbed = new EmbedBuilder()
+                        .setTitle('Success')
+                        .setDescription(`Successfully created a **${size}cm** dick for <@${user.id}> with the name of **${dickName}**`)
+                        .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
+                        .setTimestamp()
+
+                    await interaction.editReply({embeds:[startEmbed]})
+                    break;
+
+                    } catch (e) {
+                        const errorEmbed = new EmbedBuilder()
+                            .setTitle('Error')
+                            .setDescription(e)
+                            .setFooter({ text: `Requested by ${interaction.member?.nickname || interaction.user.displayName}`, iconURL: interaction.client.user.displayAvatarURL() })
+                            .setTimestamp()
+
+                    await interaction.editReply({embeds:[errorEmbed]})
+                    break;
+
+                    }
+
+
+                    
+
     
             }
         }
