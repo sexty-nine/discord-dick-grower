@@ -23,7 +23,5 @@ export default class extends Client {
         this.events = new Collection()
         this.commands = new Collection()
         this.config = Config
-
-        this.login(this.config.token)
     }
 }
