@@ -1,0 +1,19 @@
+{
+  "name": "discord-dick-grower",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsx ./src/index.js",
+    "build": "tsc",
+    "start": "node ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types": "link:node/@types",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
