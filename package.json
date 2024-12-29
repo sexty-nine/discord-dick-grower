@@ -2,7 +2,7 @@
   "name": "dick-grower",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +15,9 @@
     "dotenv": "^16.4.7",
     "mongoose": "^8.9.2",
     "pagination.djs": "^4.0.17"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
   }
 }

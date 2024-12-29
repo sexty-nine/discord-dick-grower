@@ -1,13 +1,26 @@
 // Importing discord.js, chalk & logger
-const { Client, GatewayIntentBits, Collection } = require("discord.js");
-const logger = require("./functions/logging.js");
-const chalk = require("chalk");
-const fs = require('node:fs');
+import { Client, GatewayIntentBits, Collection } from "discord.js";
+import logger from "./functions/logging.js";
+import chalk from "chalk";
+import fs from 'node:fs';
+
+
+
+declare module "discord.js" {
+    export interface Client {
+      commands: Collection<string, any>;
+      messageCommands: Collection<string, any>;
+      coolDowns: Collection<string , number>;
+      config: any
+      logger: logger
+    }
+  }
+
 // Creating a new Client
 
-const client = new Client({
+const client:Client = new Client({
     intents: [
-        GatewayIntentBits.Guilds,
+        GatewayIntentBits.Guilds,   
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMembers,
@@ -17,17 +30,22 @@ const client = new Client({
 
 /* ----- Variables ----- */
 
+
 client.commands = new Collection();
 client.messageCommands = new Collection();
-client.cooldowns = new Collection();
-client.config = require("./utils/config.js");
+client.coolDowns = new Collection();
+client.config = require("./utils/config");
 client.logger = new logger
+
 
 // some prototypes for making the code more readable
 
+// TODO fix this 
+/*
 Array.prototype.random = function () {
     return this[ Math.floor((Math.random() * this.length)) ];
 }
+*/
 
 /* ----- Handlers ----- */
 
