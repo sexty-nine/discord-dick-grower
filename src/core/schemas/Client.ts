@@ -1,10 +1,11 @@
 import { Client, GatewayIntentBits, ActivityType, Collection } from "discord.js";
 
+import Config from '../utils/config'
 
 export default class extends Client {
     public events: Collection<string, any>;
     public commands: Collection<string, any>;
-
+    public readonly config: typeof Config
     constructor() {
         super({
             intents: [
@@ -21,5 +22,8 @@ export default class extends Client {
 
         this.events = new Collection()
         this.commands = new Collection()
+        this.config = Config
+
+        this.login(this.config.token)
     }
 }
