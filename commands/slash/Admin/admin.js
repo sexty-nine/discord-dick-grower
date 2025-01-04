@@ -138,10 +138,10 @@ module.exports = {
                     break;
 
                 case 'set-size':
-const dick = await Dick.findOne({
-                chatId:chatId,
-                userId: user.id,
-            }).exec()
+                    const dick = await Dick.findOne({
+                        chatId:chatId,
+                        userId: user.id,
+                    }).exec();
                     await dick.updateOne({
                         size:size
                     })
@@ -157,9 +157,9 @@ const dick = await Dick.findOne({
                     break;
                 case 'start':
                     const dick = await Dick.findOne({
-                chatId:chatId,
-                userId: user.id,
-            }).exec()
+                        chatId:chatId,
+                        userId: user.id,
+                    }).exec()
                     if (dick) {
                         const dickExistsErrorEmbed = new EmbedBuilder()
                             .setTitle('Error')
