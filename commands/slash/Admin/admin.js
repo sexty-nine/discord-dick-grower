@@ -156,11 +156,11 @@ module.exports = {
 
                     break;
                 case 'start':
-                    const dick = await Dick.findOne({
+                    const dickExists = await Dick.findOne({
                         chatId:chatId,
                         userId: user.id,
                     }).exec()
-                    if (dick) {
+                    if (dickExists) {
                         const dickExistsErrorEmbed = new EmbedBuilder()
                             .setTitle('Error')
                             .setDescription(`<@${user.id}> already has an dick!`) 
