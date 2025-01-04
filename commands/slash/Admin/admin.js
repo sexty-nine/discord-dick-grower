@@ -78,7 +78,7 @@ module.exports = {
             const subCommand = interaction.options.getSubcommand();
             const chatId = interaction.guildId ?? interaction.channelId;
             const user = interaction.options.getUser('user');
-
+            const size = interaction.options.getInteger('size');
             const dick = await Dick.findOne({
                 chatId:chatId,
                 userId: user.id,
