@@ -77,12 +77,7 @@ module.exports = {
 
             const subCommand = interaction.options.getSubcommand();
             const chatId = interaction.guildId ?? interaction.channelId;
-            const user = interaction.options.getUser('user');
-            const size = interaction.options.getInteger('size');
-            const dick = await Dick.findOne({
-                chatId:chatId,
-                userId: user.id,
-            }).exec()
+            
 
 
             switch (subCommand){
@@ -141,7 +136,12 @@ module.exports = {
                     break;
 
                 case 'set-size':
-
+                    const user = interaction.options.getUser('user');
+                    const size = interaction.options.getInteger('size');
+                    const dick = await Dick.findOne({
+                chatId:chatId,
+                userId: user.id,
+                    }).exec()
                     await dick.updateOne({
                         size:size
                     })
@@ -156,6 +156,12 @@ module.exports = {
 
                     break;
                 case 'start':
+const user = interaction.options.getUser('user');
+            
+            const dick = await Dick.findOne({
+                chatId:chatId,
+                userId: user.id,
+            }).exec()
                     if (dick) {
                         const dickExistsErrorEmbed = new EmbedBuilder()
                             .setTitle('Error')
