@@ -37,7 +37,6 @@ module.exports = {
                 .addUserOption(option => option
                     .setName('user')
                     .setDescription('The user you want to set the size for')
-                    .setRequired(true)
                 )
                 .addIntegerOption(option => option
                     .setName('size')
@@ -77,7 +76,7 @@ module.exports = {
 
             const subCommand = interaction.options.getSubcommand();
             const chatId = interaction.guildId ?? interaction.channelId;
-            const user = interaction.options.getUser('user');
+            const user = interaction.options.getUser('user') ?? interaction.user;
             const size = interaction.options.getInteger('size');
             
 
