@@ -34,15 +34,16 @@ module.exports = {
             ).addSubcommand(sub => sub
                 .setName('set-size')
                 .setDescription('Set the size of the dick of a user!')
-                .addUserOption(option => option
-                    .setName('user')
-                    .setDescription('The user you want to set the size for')
-                )
-                .addIntegerOption(option => option
+.addIntegerOption(option => option
                     .setName('size')
                     .setDescription('The size you want to set the dick to')
                     .setRequired(true)
                 )
+                .addUserOption(option => option
+                    .setName('user')
+                    .setDescription('The user you want to set the size for')
+                )
+                
             ).addSubcommand(sub => sub
                 .setName('start')
                 .setDescription('Forcefully starts a dick account for a user!')
