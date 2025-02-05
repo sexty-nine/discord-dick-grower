@@ -47,7 +47,7 @@ module.exports = {
     
         }
 
-        const increment = Math.floor(Math.random() * 16)
+        const increment = Math.floor(Math.random() * 16) * dick.growMultiplier;
 
         const newDick = await dick.updateOne({
             size: dick.size + increment,
