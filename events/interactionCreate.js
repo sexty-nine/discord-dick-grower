@@ -30,7 +30,7 @@ module.exports = {
             	const logEmbed = new EmbedBuilder()
             		.setAuthor({
             			name: `${interaction.user.displayName} (${interaction.user.username})`,
-            			iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
+            			iconURL: interaction.user.displayAvatarURL({ dynamic: true })
             		})
             		.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
             		.setDescription(
