@@ -32,7 +32,7 @@ module.exports = {
             			name: `${interaction.user.displayName} (${interaction.user.username})`,
             			iconURL: interaction.user.displayAvatarURL({ dynamic: true })
             		})
-            		.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
+            		
             		.setDescription(
                         `**User:** ${interaction.user.username}\n` +
             		    `**Display Name:** ${interaction.user.displayName}\n` +
