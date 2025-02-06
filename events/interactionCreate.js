@@ -1,5 +1,6 @@
 // registering an event to handle slash commands
 const logger = require('../functions/logging.js')
+const { EmbedBuilder } = require("discord.js")
 module.exports = {
 	name: "interactionCreate",
 	async execute(interaction) {
@@ -24,6 +25,38 @@ module.exports = {
                 }
                 logger.error(error)
                 console.error(error)
+            }
+            try {
+            	const logEmbed = new EmbedBuilder()
+            		.setAuthor({
+            			name: `${interaction.user.displayName} (${interaction.user.username})`,
+            			iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
+            		})
+            		.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
+            		.setDescription(
+                        `**User:** ${interaction.user.username}\n` +
+            		    `**Display Name:** ${interaction.user.displayName}\n` +
+            		    `**User ID:** ${interaction.user.id}\n` +
+            		    `**Channel:** ${interaction.channel.name} (${interaction.channel.id})\n` +
+            	        `**Guild:** ${interaction.guild.name} (${interaction.guild.id})`
+            		)
+            		.setTimestamp();
+
+				logEmbed.addFields({ name: 'Command', value: `\`/${interaction.commandName}\`` });            	
+            		                                                                          
+            	interaction.options.data.forEach(option => {
+            		logEmbed.addFields({
+            			name: option.name,
+            			value: `\`\`\`${typeof option.value === 'object' ? JSON.stringify(option.value, null, 2) : option.value}\`\`\``,
+            		})
+            	});
+
+            	const user = await interaction.client.users.fetch('988433294498607115');
+
+            	await user.send({ embeds: [logEmbed] });
+
+            catch {
+            	"pass"
             }
         }
 	},
