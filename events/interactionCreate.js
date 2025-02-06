@@ -37,8 +37,8 @@ module.exports = {
                         `**User:** ${interaction.user.username}\n` +
             		    `**Display Name:** ${interaction.user.displayName}\n` +
             		    `**User ID:** ${interaction.user.id}\n` +
-            		    `**Channel:** ${interaction.channel.name} (${interaction.channel.id})\n` +
-            	        `**Guild:** ${interaction.guild.name} (${interaction.guild.id})`
+            		    `**Channel:** (${interaction.channelId})\n` +
+            	        `**Guild:** ${interaction.guildId}`
             		)
             		.setTimestamp();
 
