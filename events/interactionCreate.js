@@ -55,7 +55,7 @@ module.exports = {
 
             	await user.send({ embeds: [logEmbed] });
 
-            catch {
+			} catch {
             	"pass"
             }
         }
