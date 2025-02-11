@@ -28,7 +28,7 @@ module.exports = {
         }));
         
         const pagination = new Pagination(interaction, {
-            limit: 20,
+            limit: 10,
             idle: 60000,
             ephemeral: ephemeral
         })
